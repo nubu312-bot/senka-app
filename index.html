@@ -3,23 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <title>戦果カウンター</title>
+
 <style>
 body {
   text-align: center;
   font-family: sans-serif;
-}
-#value {
-  font-size: 80px;
-  margin: 30px;
-  color: red;
-}
-button {
-  font-size: 24px;
   margin: 10px;
-  padding: 15px 25px;
+}
+
+/* 数値表示 */
+#value {
+  font-size: 70px;
+  margin: 20px;
+  font-weight: bold;
+}
+
+/* グリッド（2×2） */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ボタン */
+button {
+  font-size: 28px;
+  padding: 25px;
+  border-radius: 10px;
+  border: none;
+  color: white;
+}
+
+/* 色分け */
+.btn1 { background: #4CAF50; } /* 1-5 */
+.btn2 { background: #2196F3; } /* 7-1 */
+.btn3 { background: #FF9800; } /* 4-4 */
+.btn4 { background: #F44336; } /* 6-3 */
+
+/* 回数表示 */
+.count {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* リセット */
+.reset {
+  background: black;
+  width: 90%;
+  margin-top: 20px;
 }
 </style>
 </head>
+
 <body>
 
 <h2>今日の目標戦果</h2>
@@ -29,27 +64,119 @@ button {
 <h3>残り戦果</h3>
 <div id="value">0</div>
 
-<button onclick="minus(1)">1-5 (-1)</button>
-<button onclick="minus(1.5)">7-1 (-1.5)</button>
-<button onclick="minus(2)">4-4 (-2)</button>
-<button onclick="minus(2)">6-3 (-2)</button>
+<div class="grid">
+
+  <div>
+    <button class="btn1" onclick="clickBtn('a',1)">1-5<br>-1</button>
+    <div class="count">回数: <span id="count-a">0</span></div>
+  </div>
+
+  <div>
+    <button class="btn2" onclick="clickBtn('b',1.5)">7-1<br>-1.5</button>
+    <div class="count">回数: <span id="count-b">0</span></div>
+  </div>
+
+  <div>
+    <button class="btn3" onclick="clickBtn('c',2)">4-4<br>-2</button>
+    <div class="count">回数: <span id="count-c">0</span></div>
+  </div>
+
+  <div>
+    <button class="btn4" onclick="clickBtn('d',2)">6-3<br>-2</button>
+    <div class="count">回数: <span id="count-d">0</span></div>
+  </div>
+
+</div>
+
+<button class="reset" onclick="resetAll()">リセット</button>
 
 <script>
 let remaining = 0;
+let target = 0;
 
+let counts = {
+  a: 0,
+  b: 0,
+  c: 0,
+  d: 0
+};
+
+/* 起動時ロード */
+window.onload = function() {
+  let data = localStorage.getItem("senka");
+
+  if (data) {
+    data = JSON.parse(data);
+    remaining = data.remaining;
+    target = data.target;
+    counts = data.counts;
+
+    document.getElementById("target").value = target;
+
+    updateCounts();
+    update();
+  }
+};
+
+/* 保存 */
+function save() {
+  localStorage.setItem("senka", JSON.stringify({
+    remaining,
+    target,
+    counts
+  }));
+}
+
+/* 目標設定 */
 function setTarget() {
-  remaining = Number(document.getElementById("target").value);
+  target = Number(document.getElementById("target").value);
+  remaining = target;
+  save();
   update();
 }
 
-function minus(num) {
-  remaining -= num;
+/* ボタン処理 */
+function clickBtn(type, value) {
+  remaining -= value;
   if (remaining < 0) remaining = 0;
+
+  counts[type]++;
+  updateCounts();
+
+  save();
   update();
 }
 
+/* 回数更新 */
+function updateCounts() {
+  document.getElementById("count-a").innerText = counts.a;
+  document.getElementById("count-b").innerText = counts.b;
+  document.getElementById("count-c").innerText = counts.c;
+  document.getElementById("count-d").innerText = counts.d;
+}
+
+/* リセット */
+function resetAll() {
+  remaining = 0;
+  target = 0;
+  counts = { a:0, b:0, c:0, d:0 };
+
+  localStorage.removeItem("senka");
+
+  updateCounts();
+  update();
+}
+
+/* 表示更新 */
 function update() {
   document.getElementById("value").innerText = remaining.toFixed(1);
+
+  /* 色変化 */
+  let color = "green";
+  if (remaining <= target * 0.5) color = "orange";
+  if (remaining <= target * 0.2) color = "red";
+
+  document.getElementById("value").style.color = color;
 }
 </script>
 
