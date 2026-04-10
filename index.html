@@ -11,41 +11,45 @@ body {
   margin: 10px;
 }
 
-/* 数値表示 */
+/* 数値 */
 #value {
   font-size: 80px;
   margin: 20px;
   font-weight: bold;
 }
 
-/* グリッド（2×2） */
+/* グリッド */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
-/* ボタン（超巨大化） */
-button {
-  font-size: 42px;
-  padding: 70px 0;
+/* ボタン */
+.btn {
+  font-size: 32px;
+  padding: 50px 0;
   border-radius: 20px;
   border: none;
   color: white;
   width: 100%;
+  position: relative;
 }
 
-/* 色分け */
-.btn1 { background: #4CAF50; } /* 1-5 */
-.btn2 { background: #2196F3; } /* 7-1 */
-.btn3 { background: #FF9800; } /* 4-4 */
-.btn4 { background: #F44336; } /* 6-3 */
-
-/* 回数 */
+/* 回数（ボタン内） */
 .count {
-  font-size: 20px;
-  margin-bottom: 10px;
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
 }
+
+/* 色 */
+.btn1 { background: #4CAF50; }
+.btn2 { background: #2196F3; }
+.btn3 { background: #FF9800; }
+.btn4 { background: #F44336; }
 
 /* リセット */
 .reset {
@@ -69,25 +73,25 @@ button {
 
 <div class="grid">
 
-  <div>
-    <button class="btn1" onclick="clickBtn('a',1)">1-5<br>-1</button>
-    <div class="count">回数: <span id="count-a">0</span></div>
-  </div>
+  <button class="btn btn1" onclick="clickBtn('a',1)">
+    1-5<br>-1
+    <div class="count" id="count-a">0</div>
+  </button>
 
-  <div>
-    <button class="btn2" onclick="clickBtn('b',1.5)">7-1<br>-1.5</button>
-    <div class="count">回数: <span id="count-b">0</span></div>
-  </div>
+  <button class="btn btn2" onclick="clickBtn('b',1.5)">
+    7-1<br>-1.5
+    <div class="count" id="count-b">0</div>
+  </button>
 
-  <div>
-    <button class="btn3" onclick="clickBtn('c',2)">4-4<br>-2</button>
-    <div class="count">回数: <span id="count-c">0</span></div>
-  </div>
+  <button class="btn btn3" onclick="clickBtn('c',2)">
+    4-4<br>-2
+    <div class="count" id="count-c">0</div>
+  </button>
 
-  <div>
-    <button class="btn4" onclick="clickBtn('d',2)">6-3<br>-2</button>
-    <div class="count">回数: <span id="count-d">0</span></div>
-  </div>
+  <button class="btn btn4" onclick="clickBtn('d',2)">
+    6-3<br>-2
+    <div class="count" id="count-d">0</div>
+  </button>
 
 </div>
 
@@ -97,17 +101,11 @@ button {
 let remaining = 0;
 let target = 0;
 
-let counts = {
-  a: 0,
-  b: 0,
-  c: 0,
-  d: 0
-};
+let counts = { a:0, b:0, c:0, d:0 };
 
-/* 起動時ロード */
+/* ロード */
 window.onload = function() {
   let data = localStorage.getItem("senka");
-
   if (data) {
     data = JSON.parse(data);
     remaining = data.remaining;
@@ -115,7 +113,6 @@ window.onload = function() {
     counts = data.counts;
 
     document.getElementById("target").value = target;
-
     updateCounts();
     update();
   }
@@ -124,13 +121,11 @@ window.onload = function() {
 /* 保存 */
 function save() {
   localStorage.setItem("senka", JSON.stringify({
-    remaining,
-    target,
-    counts
+    remaining, target, counts
   }));
 }
 
-/* 目標設定 */
+/* 目標 */
 function setTarget() {
   target = Number(document.getElementById("target").value);
   remaining = target;
@@ -145,7 +140,6 @@ function clickBtn(type, value) {
 
   counts[type]++;
   updateCounts();
-
   save();
   update();
 }
@@ -165,12 +159,11 @@ function resetAll() {
   counts = { a:0, b:0, c:0, d:0 };
 
   localStorage.removeItem("senka");
-
   updateCounts();
   update();
 }
 
-/* 表示更新 */
+/* 表示 */
 function update() {
   document.getElementById("value").innerText = remaining.toFixed(1);
 
