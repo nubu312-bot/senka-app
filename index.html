@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>戦果カウンター</title>
+<style>
+body {
+  text-align: center;
+  font-family: sans-serif;
+}
+#value {
+  font-size: 80px;
+  margin: 30px;
+  color: red;
+}
+button {
+  font-size: 24px;
+  margin: 10px;
+  padding: 15px 25px;
+}
+</style>
+</head>
+<body>
+
+<h2>今日の目標戦果</h2>
+<input type="number" id="target">
+<button onclick="setTarget()">設定</button>
+
+<h3>残り戦果</h3>
+<div id="value">0</div>
+
+<button onclick="minus(1)">1-5 (-1)</button>
+<button onclick="minus(1.5)">7-1 (-1.5)</button>
+<button onclick="minus(2)">4-4 (-2)</button>
+<button onclick="minus(2)">6-3 (-2)</button>
+
+<script>
+let remaining = 0;
+
+function setTarget() {
+  remaining = Number(document.getElementById("target").value);
+  update();
+}
+
+function minus(num) {
+  remaining -= num;
+  if (remaining < 0) remaining = 0;
+  update();
+}
+
+function update() {
+  document.getElementById("value").innerText = remaining.toFixed(1);
+}
+</script>
+
+</body>
+</html>
