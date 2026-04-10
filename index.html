@@ -13,7 +13,7 @@ body {
 
 /* 数値表示 */
 #value {
-  font-size: 70px;
+  font-size: 80px;
   margin: 20px;
   font-weight: bold;
 }
@@ -22,16 +22,17 @@ body {
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 20px;
 }
 
-/* ボタン */
+/* ボタン（超巨大化） */
 button {
-  font-size: 28px;
-  padding: 25px;
-  border-radius: 10px;
+  font-size: 42px;
+  padding: 70px 0;
+  border-radius: 20px;
   border: none;
   color: white;
+  width: 100%;
 }
 
 /* 色分け */
@@ -40,17 +41,19 @@ button {
 .btn3 { background: #FF9800; } /* 4-4 */
 .btn4 { background: #F44336; } /* 6-3 */
 
-/* 回数表示 */
+/* 回数 */
 .count {
-  font-size: 16px;
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
 /* リセット */
 .reset {
   background: black;
-  width: 90%;
   margin-top: 20px;
+  width: 95%;
+  padding: 30px;
+  font-size: 30px;
 }
 </style>
 </head>
@@ -58,7 +61,7 @@ button {
 <body>
 
 <h2>今日の目標戦果</h2>
-<input type="number" id="target">
+<input type="number" id="target" style="font-size:24px;">
 <button onclick="setTarget()">設定</button>
 
 <h3>残り戦果</h3>
@@ -135,7 +138,7 @@ function setTarget() {
   update();
 }
 
-/* ボタン処理 */
+/* ボタン */
 function clickBtn(type, value) {
   remaining -= value;
   if (remaining < 0) remaining = 0;
@@ -171,7 +174,6 @@ function resetAll() {
 function update() {
   document.getElementById("value").innerText = remaining.toFixed(1);
 
-  /* 色変化 */
   let color = "green";
   if (remaining <= target * 0.5) color = "orange";
   if (remaining <= target * 0.2) color = "red";
