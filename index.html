@@ -28,7 +28,6 @@ body {
   height: 65vh;
 }
 
-/* ボタン */
 .btn {
   font-size: 32px;
   border-radius: 15px;
@@ -37,17 +36,14 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
-
   transition: transform 0.1s, filter 0.1s;
 }
 
-/* 押したとき */
 .btn:active {
-  transform: scale(0.9);       /* 縮む */
-  filter: brightness(0.7);     /* 暗くなる */
+  transform: scale(0.9);
+  filter: brightness(0.7);
 }
 
-/* 回数 */
 .count {
   position: absolute;
   bottom: 10px;
@@ -56,7 +52,6 @@ body {
   font-weight: bold;
 }
 
-/* 色 */
 .btn1 { background: #4CAF50; }
 .btn2 { background: #2196F3; }
 .btn3 { background: #FF9800; }
@@ -96,8 +91,9 @@ body {
     <div class="count" id="count-b">0</div>
   </button>
 
-  <button class="btn btn3" onclick="clickBtn('c',2)">
-    4-4<br>-2
+  <!-- 🔥 ここ変更 -->
+  <button class="btn btn3" onclick="clickBtn('c',1.3)">
+    3-2<br>-1.3
     <div class="count" id="count-c">0</div>
   </button>
 
@@ -148,7 +144,6 @@ function clickBtn(type, value) {
   counts[type]++;
   updateCounts();
 
-  /* 振動（スマホ） */
   if (navigator.vibrate) {
     navigator.vibrate(30);
   }
@@ -164,12 +159,13 @@ function updateCounts() {
   document.getElementById("count-d").innerText = counts.d;
 }
 
+/* 🔥 ここが重要変更 */
 function resetAll() {
-  target = 60;
-  remaining = 60;
+  target = Number(document.getElementById("target").value) || 60;
+  remaining = target;  // ← 入力値に合わせる
   counts = { a:0, b:0, c:0, d:0 };
 
-  localStorage.removeItem("senka");
+  save();
 
   updateCounts();
   update();
